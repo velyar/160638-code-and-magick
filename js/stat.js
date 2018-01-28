@@ -45,13 +45,9 @@ function getHeights(times) {
   return heights;
 }
 
-// Функция отрисовки имен
-function renderNames(names, ctx) {
-  var currentPosition = 150;
-  for (var i = 0; i < names.length; i++) {
-    ctx.fillText(names[i], currentPosition, NAME_Y);
-    currentPosition += COLUMN_MARGIN + COLUMN_WIDTH;
-  }
+// Функция отрисовки одного имени
+function renderName(name, ctx, position) {
+  ctx.fillText(name, position, NAME_Y);
 }
 
 // Функция выбора радномной прозрачности синиго цвета
@@ -73,35 +69,42 @@ function renderCloud(ctx) {
   ctx.fillText('Список результатов:', 120, 60);
 }
 
+// Функция отрисовки и заливки одного столбика гистограммы
+function renderColumn(ctx, time, height, name, position) {
+  if (name === 'Вы') {
+    ctx.fillStyle = PLAYER_COLOR;
+  } else {
+    ctx.fillStyle = getRandomBlueColor();
+  }
+  ctx.fillRect(
+      position,
+      COLUMN_BOTTOM - height,
+      COLUMN_WIDTH,
+      height
+  );
+  ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+  ctx.fillText(
+      Math.floor(time),
+      position,
+      COLUMN_BOTTOM - height - NAME_MARGIN
+  );
+}
+
 // Функция отрисовки и заливки столбиков гистограммы
 function renderColumns(ctx, times, heights, names) {
-  var currentPosition = 150;
   for (var i = 0; i < times.length; i++) {
-    if (names[i] === 'Вы') {
-      ctx.fillStyle = PLAYER_COLOR;
-    } else {
-      ctx.fillStyle = getRandomBlueColor();
-    }
-    ctx.fillRect(
-        currentPosition,
-        COLUMN_BOTTOM - heights[i],
-        COLUMN_WIDTH,
-        heights[i]
-    );
-    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-    ctx.fillText(
-        Math.floor(times[i]),
-        currentPosition,
-        COLUMN_BOTTOM - heights[i] - NAME_MARGIN
-    );
-    currentPosition += COLUMN_WIDTH + COLUMN_MARGIN;
+    var position = 150;
+    var height = heights[i];
+    var name = names[i];
+    renderName(name, ctx, position);
+    renderColumn(ctx, times, height, name, position);
+    position += COLUMN_MARGIN + COLUMN_WIDTH;
   }
 }
 
 // Функция отрисовки статистики по всем игрокам
 window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx);
-  renderNames(names, ctx);
   var heights = getHeights(times);
   renderColumns(ctx, times, heights, names);
 };
