@@ -92,12 +92,13 @@ function renderColumn(ctx, time, height, name, position) {
 
 // Функция отрисовки и заливки столбиков гистограммы
 function renderColumns(ctx, times, heights, names) {
+  var position = 150;
   for (var i = 0; i < times.length; i++) {
-    var position = 150;
     var height = heights[i];
     var name = names[i];
+    var time = times[i];
     renderName(name, ctx, position);
-    renderColumn(ctx, times, height, name, position);
+    renderColumn(ctx, time, height, name, position);
     position += COLUMN_MARGIN + COLUMN_WIDTH;
   }
 }
