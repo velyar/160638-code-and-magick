@@ -1019,3 +1019,8 @@ input[type=radio]:checked + .review-mark-label
 
     opacity: 0;
 }
+
+.upload .setup-user-pic
+{
+  opacity: 0;
+}
